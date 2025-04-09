@@ -7,20 +7,22 @@
 import React from 'react';
 import {AppRegistry, StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-windows';
+import MyTextComponent2 from './test2';
 
 export default class Bootstrap extends React.Component {
   render() {
     return (
-      <View style={styles.container}>
-        <Text style={styles.welcome}>Welcome to React Native!</Text>
-        <Text
-          style={styles.welcome}
-          tooltip=" tooltip message for the text"
-          accessible={true}
-          selectable={true}>
-          Click here : This is a text with a tooltip.
-        </Text>
-      </View>
+      // <View style={styles.container}>
+      //   <Text style={styles.welcome}>Welcome to React Native!</Text>
+      //   <Text
+      //     style={styles.welcome}
+      //     tooltip=" tooltip message for the text"
+      //     accessible={true}
+      //     selectable={true}>
+      //     Click here : This is a text with a tooltip.
+      //   </Text>
+      // </View>
+      <MyTextComponent2/>
     );
   }
 }
