@@ -60,6 +60,12 @@ void ParagraphComponentView::updateProps(
   if (oldViewProps.textAttributes.alignment != newViewProps.textAttributes.alignment) {
     updateTextAlignment(newViewProps.textAttributes.alignment);
   }
+  
+  if (oldViewProps.textAttributes.allowFontScaling != newViewProps.textAttributes.allowFontScaling)
+  {
+    m_allowFontScaling =
+        newViewProps.textAttributes.allowFontScaling.has_value() ? newViewProps.textAttributes.allowFontScaling.value():true;
+  }
 
   Super::updateProps(props, oldProps);
 }
@@ -78,7 +84,16 @@ void ParagraphComponentView::updateState(
 void ParagraphComponentView::updateLayoutMetrics(
     facebook::react::LayoutMetrics const &layoutMetrics,
     facebook::react::LayoutMetrics const &oldLayoutMetrics) noexcept {
-  Super::updateLayoutMetrics(layoutMetrics, oldLayoutMetrics);
+  if (m_allowFontScaling)
+  {
+    facebook::react::LayoutMetrics newLayoutMetrics = layoutMetrics;
+    newLayoutMetrics.pointScaleFactor *= getScaleFactor();
+    Super::updateLayoutMetrics(newLayoutMetrics, oldLayoutMetrics);
+  }
+  else
+  {
+    Super::updateLayoutMetrics(layoutMetrics, oldLayoutMetrics);
+  }  
 
   if (layoutMetrics.pointScaleFactor != oldLayoutMetrics.pointScaleFactor) {
     m_textLayout = nullptr;
@@ -146,6 +161,14 @@ void ParagraphComponentView::updateTextAlignment(
   }
   // TODO
   // m_textFormat->SetTextAlignment(alignment);
+}
+
+float ParagraphComponentView::getScaleFactor() const noexcept {
+  float currentTextScaleFactor = static_cast<float>(winrt::Windows::UI::ViewManagement::UISettings().TextScaleFactor());
+
+  //TODO : maxFontSizeMultiplier
+
+  return currentTextScaleFactor;
 }
 
 void ParagraphComponentView::OnRenderingDeviceLost() noexcept {
