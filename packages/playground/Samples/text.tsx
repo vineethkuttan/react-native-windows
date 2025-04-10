@@ -7,7 +7,7 @@
 import React from 'react';
 import {AppRegistry, StyleSheet, View} from 'react-native';
 import {Text} from 'react-native-windows';
-import MyTextComponent2 from './test2';
+import MultiContainerComponent from './MultiContainerComponent';
 
 export default class Bootstrap extends React.Component {
   render() {
@@ -22,7 +22,7 @@ export default class Bootstrap extends React.Component {
       //     Click here : This is a text with a tooltip.
       //   </Text>
       // </View>
-      <MyTextComponent2/>
+      <MultiContainerComponent/>
     );
   }
 }
