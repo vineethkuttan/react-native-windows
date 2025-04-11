@@ -160,15 +160,25 @@ void ParagraphComponentView::updateTextAlignment(
   // m_textFormat->SetTextAlignment(alignment);
 }
 
-void ParagraphComponentView::adjustFontSizeToFit() noexcept
-{
-  DWRITE_TEXT_METRICS metrics;
-  winrt::check_hresult(m_textLayout->GetMetrics(&metrics));
+float ParagraphComponentView::getMinFontSize() noexcept{
+  auto defaultFontSize = 2.0f;
+  //TODO:
+  // implementation of minimumFontScale prop can be added here 
+  return std::max(
+      defaultFontSize,
+      (isnan(m_paragraphAttributes.minimumFontSize) ? defaultFontSize:
+                                      m_paragraphAttributes.minimumFontSize));
+}
+ void ParagraphComponentView::adjustFontSizeToFit() noexcept
+{   
+  DWRITE_TEXT_METRICS metrics; 
+  winrt::check_hresult(m_textLayout->GetMetrics(&metrics)); 
+  //Better Approach should be implemented , this uses O(n)
   while ((m_paragraphAttributes.maximumNumberOfLines != 0 &&
     m_paragraphAttributes.maximumNumberOfLines < static_cast<int>(metrics.lineCount)) ||
          metrics.height > metrics.layoutHeight || metrics.width > metrics.layoutWidth)
   {
-    if (m_textLayout->GetFontSize() <= 2)
+    if (m_textLayout->GetFontSize() <= getMinFontSize()) //reached minimum font size , so no more size reducing
     {
       break;
     }
@@ -188,6 +198,8 @@ void ParagraphComponentView::adjustFontSizeToFit() noexcept
 
 void ParagraphComponentView::reduceFontSize() noexcept
 {
+  auto fontReduceFactor = 1.0f;
+
   auto attributedString_to_resize = m_attributedStringBox.getValue();
 
   auto fragments_copy_to_resize = attributedString_to_resize.getFragments();
@@ -195,7 +207,7 @@ void ParagraphComponentView::reduceFontSize() noexcept
   attributedString_to_resize.getFragments().clear();
 
   for (auto frag : fragments_copy_to_resize) {
-    frag.textAttributes.fontSize -= 1;
+    frag.textAttributes.fontSize -= fontReduceFactor; 
 
     attributedString_to_resize.appendFragment(std::move(frag));
   }

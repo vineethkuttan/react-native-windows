@@ -2,34 +2,34 @@ import React, { useState } from 'react';
 import { View, Text, Button, StyleSheet } from 'react-native';
 
 const MultiContainerComponent = () => {
-  const [count, setCount] = useState("This is a normal text");
+  const [text, setText] = useState("This is a normal text");
   const [nooflines, setNoOfLines] = useState(0);
 
-  const increaseCount = () => {
-    setCount(count + " Added");
+  const addText = () => {
+    setText(text + " Added text");
   };
   
   const sliceFromEnd = () => {
-    setCount(prevText => prevText.slice(0,count.length-6));
+    setText(prevText => prevText.slice(0,text.length-6));
   };
 
-  const Reset = () => {
-    setCount("This is a normal text");
+  const Reset = () => {  
+    setText("This is a normal text");
     setNoOfLines(0);
   };
 
   return (
     <View style={styles.mainContainer}>
       <View style={styles.container1}>
-        <Text numberOfLines={nooflines} adjustsFontSizeToFit style={styles.text}>{count}</Text>
+        <Text numberOfLines={nooflines} adjustsFontSizeToFit style={[styles.text,{maxHeight:130}]}>{text}</Text>
       </View>
-      <View style={styles.container3}>
-        <Text numberOfLines={nooflines} adjustsFontSizeToFit style={styles.text}>{count}</Text>
+      <View style={styles.container2}>
+        <Text numberOfLines={nooflines} adjustsFontSizeToFit style={[styles.text,{maxHeight:80}]}>{text}</Text>
       </View>
       <Text>Number of Lines {nooflines}</Text>
-      <View >
+      <View style={{flexDirection:'row'}}>
         <View style={styles.buttonContainer}>
-          <Button color='black' title="Add Text" onPress={increaseCount} />
+          <Button color='black' title="Add Text" onPress={addText} />
         </View>
         <View style={styles.buttonContainer}>
           <Button color='blue' title="Reduce" onPress={sliceFromEnd} />
@@ -52,21 +52,14 @@ const styles = StyleSheet.create({
   },
   container1: {
     backgroundColor: 'lightblue',
-    padding: 20,
+    padding: 10,
     marginBottom: 10,
     width:800,
     height: 150,
   },
   container2: {
-    backgroundColor: 'lightgreen',
-    padding: 20,
-    height:50,
-    marginBottom: 10,
-    width: 700,
-  },
-  container3: {
     backgroundColor: 'lightcoral',
-    padding: 20,
+    padding: 10,
     marginBottom: 10,
     width:500,
     height:100,
@@ -74,6 +67,7 @@ const styles = StyleSheet.create({
   buttonContainer: {
     justifyContent:"center",
     marginTop: 10,
+    padding:10
   },
   text: {
     fontSize: 18,
