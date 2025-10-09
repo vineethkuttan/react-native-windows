@@ -2,6 +2,6 @@
   "type": "patch",
   "comment": "Removing auto generated files",
   "packageName": "@rnw-scripts/format-files",
-  "email": "vinikuttan99@gmail.com",
+  "email": "kvineeth@microsoft.com",
   "dependentChangeType": "patch"
 }
