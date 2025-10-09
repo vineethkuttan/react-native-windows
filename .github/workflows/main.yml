@@ -1,0 +1,2 @@
+- name: PR Cherry Pick
+  uses: wireapp/action-auto-cherry-pick@v1.0.2
