@@ -11,7 +11,14 @@ name: Cherry-pick Commit to Branch
       target_branch:
         description: 'Target branch name to cherry-pick into'
         required: true
-        type: string
+        type: choice
+        options:
+          - main
+          - integrate
+          - integrate2.0
+          - testing
+          - addFontAttributesToE2E
+          - codegenRemoval
 
 jobs:
   cherry-pick:
