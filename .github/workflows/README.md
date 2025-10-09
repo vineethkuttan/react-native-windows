@@ -17,12 +17,12 @@ Cherry-picks a specific commit into a target branch.
 3. Click "Run workflow"
 4. Enter the required inputs:
    - **Commit SHA or ID**: The full commit hash or short SHA of the commit to cherry-pick
-   - **Target branch name**: Select the target branch from the dropdown menu
+   - **Target branch name**: The branch where you want to cherry-pick the commit
 
 **Example:**
 
 - Commit ID: `d1a95351e5203a6c0651cf73885cd7ea99e7d2b9`
-- Target branch: Select from available branches (e.g., `main`, `integrate`, `testing`)
+- Target branch: `0.79-stable`
 
 **Notes:**
 
