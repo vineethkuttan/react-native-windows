@@ -1,0 +1,115 @@
+name: Cleanup Inactive Copilot Branches
+
+on:
+  schedule:
+    # Run on the 1st and 15th of each month at 00:00 UTC (approximately bi-weekly)
+    - cron: '0 0 1,15 * *'
+  workflow_dispatch:
+    inputs:
+      inactivity_days:
+        description: 'Number of days of inactivity before deletion (0 = delete all copilot/* branches)'
+        required: false
+        default: '90'
+        type: string
+
+env:
+  # Default inactivity threshold: 90 days
+  INACTIVITY_DAYS: ${{ github.event.inputs.inactivity_days || '90' }}
+
+jobs:
+  cleanup-branches:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install GitHub CLI
+        run: |
+          sudo apt update
+          sudo apt install -y gh
+
+      - name: Authenticate GitHub CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: Identify and delete inactive copilot/* branches
+        env:
+          REPO: ${{ github.repository }}
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -e
+          
+          echo "🔍 Fetching all branches matching pattern 'copilot/*'..."
+          
+          # Fetch all branches using GitHub CLI
+          BRANCHES=$(gh api "repos/$REPO/branches" --paginate --jq '.[] | select(.name | startswith("copilot/")) | .name')
+          
+          if [ -z "$BRANCHES" ]; then
+            echo "ℹ️ No copilot/* branches found."
+            exit 0
+          fi
+          
+          echo "✅ Found copilot/* branches:"
+          echo "$BRANCHES"
+          echo ""
+          
+          # Calculate the cutoff date (current time - INACTIVITY_DAYS)
+          if [ "$INACTIVITY_DAYS" = "0" ]; then
+            echo "⚠️ INACTIVITY_DAYS=0: Will delete ALL copilot/* branches"
+            CUTOFF_TIMESTAMP=9999999999
+          else
+            CUTOFF_TIMESTAMP=$(date -d "$INACTIVITY_DAYS days ago" +%s)
+            CUTOFF_DATE=$(date -d "$INACTIVITY_DAYS days ago" --iso-8601=seconds)
+            echo "📅 Cutoff date: $CUTOFF_DATE (branches inactive for more than $INACTIVITY_DAYS days)"
+            echo ""
+          fi
+          
+          DELETED_COUNT=0
+          KEPT_COUNT=0
+          
+          # Process each branch
+          for BRANCH in $BRANCHES; do
+            echo "🔍 Checking branch: $BRANCH"
+            
+            # Get the last commit date for the branch
+            COMMIT_INFO=$(gh api "repos/$REPO/commits/$BRANCH" --jq '{sha: .sha, date: .commit.author.date, message: .commit.message}')
+            COMMIT_DATE=$(echo "$COMMIT_INFO" | jq -r '.date')
+            COMMIT_SHA=$(echo "$COMMIT_INFO" | jq -r '.sha')
+            COMMIT_MSG=$(echo "$COMMIT_INFO" | jq -r '.message' | head -1)
+            
+            echo "  📝 Last commit: $COMMIT_SHA"
+            echo "  📅 Date: $COMMIT_DATE"
+            echo "  💬 Message: $COMMIT_MSG"
+            
+            # Convert commit date to timestamp
+            COMMIT_TIMESTAMP=$(date -d "$COMMIT_DATE" +%s)
+            
+            # Check if branch should be deleted
+            if [ "$INACTIVITY_DAYS" = "0" ] || [ "$COMMIT_TIMESTAMP" -lt "$CUTOFF_TIMESTAMP" ]; then
+              DAYS_INACTIVE=$(( ($(date +%s) - COMMIT_TIMESTAMP) / 86400 ))
+              echo "  ❌ Branch is inactive (last commit $DAYS_INACTIVE days ago). Deleting..."
+              
+              # Delete the branch using GitHub CLI
+              if gh api -X DELETE "repos/$REPO/git/refs/heads/$BRANCH"; then
+                echo "  ✅ Successfully deleted branch: $BRANCH"
+                DELETED_COUNT=$((DELETED_COUNT + 1))
+              else
+                echo "  ⚠️ Failed to delete branch: $BRANCH"
+              fi
+            else
+              DAYS_INACTIVE=$(( ($(date +%s) - COMMIT_TIMESTAMP) / 86400 ))
+              echo "  ✅ Branch is still active (last commit $DAYS_INACTIVE days ago). Keeping..."
+              KEPT_COUNT=$((KEPT_COUNT + 1))
+            fi
+            
+            echo ""
+          done
+          
+          echo "=========================================="
+          echo "📊 Summary:"
+          echo "  🗑️ Deleted: $DELETED_COUNT branch(es)"
+          echo "  ✅ Kept: $KEPT_COUNT branch(es)"
+          echo "=========================================="
+          
+          if [ "$DELETED_COUNT" -eq 0 ]; then
+            echo "ℹ️ No branches were deleted."
+          else
+            echo "✅ Cleanup completed successfully!"
+          fi
