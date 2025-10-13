@@ -8,7 +8,7 @@ This directory contains GitHub Actions workflows for the React Native Windows re
 
 **File:** `cherry-pick-commit.yml`
 
-Cherry-picks a specific commit into a target branch.
+Cherry-picks a specific commit into a target branch by creating a pull request.
 
 **Usage:**
 
@@ -28,4 +28,5 @@ Cherry-picks a specific commit into a target branch.
 
 - The workflow will fail if there are merge conflicts during cherry-pick
 - If conflicts occur, you'll need to resolve them manually
-- The commit will be pushed directly to the target branch after successful cherry-pick
+- The workflow creates a new branch named `copilot/cherry-pick-<commit_id>` and opens a pull request to the target branch
+- Review and merge the pull request to complete the cherry-pick process

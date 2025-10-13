@@ -41,11 +41,15 @@ jobs:
           git config user.name "React-Native-Windows Bot"
           git config user.email "53619745+rnbot@users.noreply.github.com"
 
-      - name: Checkout target branch
+      - name: Checkout target branch and create PR branch
         working-directory: ./repo
         run: |
           git checkout "${{ github.event.inputs.target_branch }}"
           git pull origin "${{ github.event.inputs.target_branch }}"
+          
+          # Create a new branch for the cherry-pick
+          PR_BRANCH="copilot/cherry-pick-${{ github.event.inputs.commit_id }}"
+          git checkout -b "$PR_BRANCH"
 
       - name: Cherry-pick commit
         working-directory: ./repo
@@ -64,16 +68,51 @@ jobs:
             exit 1
           fi
 
-      - name: Push changes
+      - name: Push branch and create PR
         working-directory: ./repo
         env:
           GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
         run: |
           COMMIT_ID="${{ github.event.inputs.commit_id }}"
           TARGET_BRANCH="${{ github.event.inputs.target_branch }}"
-
-          echo "📤 Pushing cherry-picked commit to $TARGET_BRANCH"
-          REPO_URL="https://x-access-token:${GH_TOKEN}@github.com"
-          REPO_URL="${REPO_URL}/${{ github.repository }}.git"
-          git push "$REPO_URL" "$TARGET_BRANCH"
-          echo "✅ Successfully cherry-picked $COMMIT_ID to $TARGET_BRANCH"
+          PR_BRANCH="copilot/cherry-pick-$COMMIT_ID"
+          
+          # Get the original commit message
+          COMMIT_MSG=$(git log -1 --pretty=%B "$COMMIT_ID")
+          COMMIT_SHORT=$(echo "$COMMIT_ID" | cut -c1-7)
+          
+          echo "📤 Pushing cherry-picked commit to $PR_BRANCH"
+          git push --force --set-upstream "https://x-access-token:${GH_TOKEN}@github.com/${{ github.repository }}.git" "$PR_BRANCH"
+          
+          # Create PR body
+          PR_BODY=$(cat <<EOF
+          ### Type of Change
+          - Cherry-pick
+          
+          ### Why
+          Cherry-picking commit $COMMIT_SHORT to $TARGET_BRANCH
+          
+          ### What
+          This PR cherry-picks commit $COMMIT_ID to the $TARGET_BRANCH branch.
+          
+          **Original commit message:**
+          \`\`\`
+          $COMMIT_MSG
+          \`\`\`
+          
+          ## Changelog
+          Should this change be included in the release notes: review commit message
+          EOF
+          )
+          
+          # Create the PR
+          if gh pr create \
+            --title "Cherry-pick $COMMIT_SHORT to $TARGET_BRANCH" \
+            --body "$PR_BODY" \
+            --head "$PR_BRANCH" \
+            --base "$TARGET_BRANCH" \
+            --repo "${{ github.repository }}"; then
+            echo "✅ PR created successfully for cherry-pick of $COMMIT_ID to $TARGET_BRANCH"
+          else
+            echo "ℹ️ PR may already exist or could not be created."
+          fi
