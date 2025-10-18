@@ -899,10 +899,6 @@ function InternalTextInput(props: TextInputProps): React.Node {
         textBreakStrategy={props.textBreakStrategy}
       />
     );
-<<<<<<< Upstream
-  }
-  return <TextAncestorContext value={true}>{textInput}</TextAncestorContext>;
-=======
   } // [Windows
   else if (Platform.OS === 'windows') {
     textInput = (
@@ -953,7 +949,6 @@ function InternalTextInput(props: TextInputProps): React.Node {
   return (
     <TextAncestor.Provider value={true}>{textInput}</TextAncestor.Provider>
   );
->>>>>>> Override
 }
 
 const enterKeyHintToReturnTypeMap = {

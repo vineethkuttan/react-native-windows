@@ -199,15 +199,11 @@ module.exports = {
   get Text(): Text {
     return require('./Libraries/Text/Text').default;
   },
-<<<<<<< Upstream
   get unstable_TextAncestorContext() {
     return require('./Libraries/Text/TextAncestorContext').default;
   },
-  get TextInput() {
-=======
   // $FlowFixMe[value-as-type]
   get TextInput(): TextInput {
->>>>>>> Override
     return require('./Libraries/Components/TextInput/TextInput').default;
   },
   get Touchable(): Touchable {
