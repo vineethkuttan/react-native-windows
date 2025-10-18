@@ -59,7 +59,7 @@ import usePressability from '../../Pressability/usePressability';
 import flattenStyle from '../../StyleSheet/flattenStyle';
 import StyleSheet, {type TextStyleProp} from '../../StyleSheet/StyleSheet';
 import Text from '../../Text/Text';
-import TextAncestor from '../../Text/TextAncestor';
+import TextAncestorContext from '../../Text/TextAncestorContext';
 import Platform from '../../Utilities/Platform';
 import useMergeRefs from '../../Utilities/useMergeRefs';
 import TextInputState from './TextInputState';
@@ -899,6 +899,10 @@ function InternalTextInput(props: TextInputProps): React.Node {
         textBreakStrategy={props.textBreakStrategy}
       />
     );
+<<<<<<< Upstream
+  }
+  return <TextAncestorContext value={true}>{textInput}</TextAncestorContext>;
+=======
   } // [Windows
   else if (Platform.OS === 'windows') {
     textInput = (
@@ -949,6 +953,7 @@ function InternalTextInput(props: TextInputProps): React.Node {
   return (
     <TextAncestor.Provider value={true}>{textInput}</TextAncestor.Provider>
   );
+>>>>>>> Override
 }
 
 const enterKeyHintToReturnTypeMap = {

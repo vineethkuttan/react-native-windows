@@ -11,7 +11,7 @@
 import type {ViewProps} from './ViewPropTypes';
 
 import * as ReactNativeFeatureFlags from '../../../src/private/featureflags/ReactNativeFeatureFlags';
-import TextAncestor from '../../Text/TextAncestor';
+import TextAncestorContext from '../../Text/TextAncestorContext';
 import ViewNativeComponent from './ViewNativeComponent';
 import * as React from 'react';
 import {use} from 'react';
@@ -68,7 +68,7 @@ export default component View(
   ref?: React.RefSetter<React.ElementRef<typeof ViewNativeComponent>>,
   ...props: ViewProps
 ) {
-  const hasTextAncestor = use(TextAncestor);
+  const hasTextAncestor = use(TextAncestorContext);
 
   // Extract common props needed by all paths
   const {
@@ -577,7 +577,9 @@ export default component View(
   // Fabric supports Views in Text, so we can use the TextAncestor context
   // [Windows
   if (hasTextAncestor) {
-    return <TextAncestor value={false}>{actualView}</TextAncestor>;
+    return (
+      <TextAncestorContext value={false}>{actualView}</TextAncestorContext>
+    );
   }
   // Windows]
 
