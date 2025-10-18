@@ -49,7 +49,7 @@ struct LayoutContext : LayoutContextT<LayoutContext> {
 };
 
 struct YogaLayoutableShadowNode : YogaLayoutableShadowNodeT<YogaLayoutableShadowNode, implementation::ShadowNode> {
-  YogaLayoutableShadowNode(std::shared_ptr<const facebook::react::ShadowNode> shadowNode) noexcept;
+  YogaLayoutableShadowNode(facebook::react::ShadowNode::Shared shadowNode) noexcept;
 
   void Layout(winrt::Microsoft::ReactNative::LayoutContext layoutContext) noexcept;
 };

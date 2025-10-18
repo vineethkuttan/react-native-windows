@@ -24,11 +24,10 @@ std::shared_ptr<facebook::react::TurboModule> NativeDOMModuleProvider(
 namespace facebook::react {
 
 namespace {
-inline std::shared_ptr<const ShadowNode> getShadowNode(
+inline ShadowNode::Shared getShadowNode(
     facebook::jsi::Runtime& runtime,
     jsi::Value& shadowNodeValue) {
-  return Bridging<std::shared_ptr<const ShadowNode>>::fromJs(
-      runtime, shadowNodeValue);
+  return Bridging<ShadowNode::Shared>::fromJs(runtime, shadowNodeValue);
 }
 } // namespace
 
@@ -66,7 +65,7 @@ getPointerEventsProcessorFromRuntime(facebook::jsi::Runtime& runtime) {
 
 static std::vector<facebook::jsi::Value>
 getArrayOfInstanceHandlesFromShadowNodes(
-    const std::vector<std::shared_ptr<const ShadowNode>>& nodes,
+    const ShadowNode::ListOfShared& nodes,
     facebook::jsi::Runtime& runtime) {
   // JSI doesn't support adding elements to an array after creation,
   // so we need to accumulate the values in a vector and then create
@@ -103,8 +102,8 @@ double NativeDOM::compareDocumentPosition(
     return dom::DOCUMENT_POSITION_DISCONNECTED;
   }
 
-  std::shared_ptr<const ShadowNode> shadowNode;
-  std::shared_ptr<const ShadowNode> otherShadowNode;
+  ShadowNode::Shared shadowNode;
+  ShadowNode::Shared otherShadowNode;
 
   // Check if document references are used
   if (nativeNodeReference.isNumber() || otherNativeNodeReference.isNumber()) {
@@ -119,7 +118,7 @@ double NativeDOM::compareDocumentPosition(
 
       if (isRootShadowNode(*otherShadowNode)) {
         // If the other is a root node, we just need to check if it is its
-        // `documentElement`
+        // documentElement
         return (surfaceId == otherShadowNode->getSurfaceId())
             ? dom::DOCUMENT_POSITION_CONTAINED_BY |
                 dom::DOCUMENT_POSITION_FOLLOWING
@@ -222,9 +221,7 @@ std::tuple<
     /* rightWidth: */ int,
     /* bottomWidth: */ int,
     /* leftWidth: */ int>
-NativeDOM::getBorderWidth(
-    jsi::Runtime& rt,
-    std::shared_ptr<const ShadowNode> shadowNode) {
+NativeDOM::getBorderWidth(jsi::Runtime& rt, ShadowNode::Shared shadowNode) {
   auto currentRevision =
       getCurrentShadowTreeRevision(rt, shadowNode->getSurfaceId());
   if (currentRevision == nullptr) {
@@ -243,7 +240,7 @@ std::tuple<
     /* height: */ double>
 NativeDOM::getBoundingClientRect(
     jsi::Runtime& rt,
-    std::shared_ptr<const ShadowNode> shadowNode,
+    ShadowNode::Shared shadowNode,
     bool includeTransform) {
   auto currentRevision =
       getCurrentShadowTreeRevision(rt, shadowNode->getSurfaceId());
@@ -259,7 +256,7 @@ NativeDOM::getBoundingClientRect(
 
 std::tuple</* width: */ int, /* height: */ int> NativeDOM::getInnerSize(
     jsi::Runtime& rt,
-    std::shared_ptr<const ShadowNode> shadowNode) {
+    ShadowNode::Shared shadowNode) {
   auto currentRevision =
       getCurrentShadowTreeRevision(rt, shadowNode->getSurfaceId());
   if (currentRevision == nullptr) {
@@ -271,9 +268,7 @@ std::tuple</* width: */ int, /* height: */ int> NativeDOM::getInnerSize(
 }
 
 std::tuple</* scrollLeft: */ double, /* scrollTop: */ double>
-NativeDOM::getScrollPosition(
-    jsi::Runtime& rt,
-    std::shared_ptr<const ShadowNode> shadowNode) {
+NativeDOM::getScrollPosition(jsi::Runtime& rt, ShadowNode::Shared shadowNode) {
   auto currentRevision =
       getCurrentShadowTreeRevision(rt, shadowNode->getSurfaceId());
   if (currentRevision == nullptr) {
@@ -285,9 +280,7 @@ NativeDOM::getScrollPosition(
 }
 
 std::tuple</* scrollWidth: */ int, /* scrollHeight */ int>
-NativeDOM::getScrollSize(
-    jsi::Runtime& rt,
-    std::shared_ptr<const ShadowNode> shadowNode) {
+NativeDOM::getScrollSize(jsi::Runtime& rt, ShadowNode::Shared shadowNode) {
   auto currentRevision =
       getCurrentShadowTreeRevision(rt, shadowNode->getSurfaceId());
   if (currentRevision == nullptr) {
@@ -300,13 +293,13 @@ NativeDOM::getScrollSize(
 
 std::string NativeDOM::getTagName(
     jsi::Runtime& rt,
-    std::shared_ptr<const ShadowNode> shadowNode) {
+    ShadowNode::Shared shadowNode) {
   return dom::getTagName(*shadowNode);
 }
 
 std::string NativeDOM::getTextContent(
     jsi::Runtime& rt,
-    std::shared_ptr<const ShadowNode> shadowNode) {
+    ShadowNode::Shared shadowNode) {
   auto currentRevision =
       getCurrentShadowTreeRevision(rt, shadowNode->getSurfaceId());
   if (currentRevision == nullptr) {
@@ -318,7 +311,7 @@ std::string NativeDOM::getTextContent(
 
 bool NativeDOM::hasPointerCapture(
     jsi::Runtime& rt,
-    std::shared_ptr<const ShadowNode> shadowNode,
+    ShadowNode::Shared shadowNode,
     double pointerId) {
   bool isCapturing = getPointerEventsProcessorFromRuntime(rt).hasPointerCapture(
       static_cast<PointerIdentifier>(pointerId), shadowNode.get());
@@ -327,7 +320,7 @@ bool NativeDOM::hasPointerCapture(
 
 void NativeDOM::releasePointerCapture(
     jsi::Runtime& rt,
-    std::shared_ptr<const ShadowNode> shadowNode,
+    ShadowNode::Shared shadowNode,
     double pointerId) {
   getPointerEventsProcessorFromRuntime(rt).releasePointerCapture(
       static_cast<PointerIdentifier>(pointerId), shadowNode.get());
@@ -335,7 +328,7 @@ void NativeDOM::releasePointerCapture(
 
 void NativeDOM::setPointerCapture(
     jsi::Runtime& rt,
-    std::shared_ptr<const ShadowNode> shadowNode,
+    ShadowNode::Shared shadowNode,
     double pointerId) {
   getPointerEventsProcessorFromRuntime(rt).setPointerCapture(
       static_cast<PointerIdentifier>(pointerId), shadowNode);
@@ -347,9 +340,7 @@ std::tuple<
     /* offsetParent: */ jsi::Value,
     /* top: */ double,
     /* left: */ double>
-NativeDOM::getOffset(
-    jsi::Runtime& rt,
-    std::shared_ptr<const ShadowNode> shadowNode) {
+NativeDOM::getOffset(jsi::Runtime& rt, ShadowNode::Shared shadowNode) {
   auto currentRevision =
       getCurrentShadowTreeRevision(rt, shadowNode->getSurfaceId());
   if (currentRevision == nullptr) {
@@ -381,14 +372,14 @@ jsi::Value NativeDOM::linkRootNode(
       std::make_shared<InstanceHandle>(rt, instanceHandle, surfaceId);
   currentRevision->setInstanceHandle(instanceHandleWrapper);
 
-  return Bridging<std::shared_ptr<const ShadowNode>>::toJs(rt, currentRevision);
+  return Bridging<ShadowNode::Shared>::toJs(rt, currentRevision);
 }
 
 #pragma mark - Legacy layout APIs (for ReactNativeElement).
 
 void NativeDOM::measure(
     jsi::Runtime& rt,
-    std::shared_ptr<const ShadowNode> shadowNode,
+    ShadowNode::Shared shadowNode,
     jsi::Function callback) {
   auto currentRevision =
       getCurrentShadowTreeRevision(rt, shadowNode->getSurfaceId());
@@ -411,7 +402,7 @@ void NativeDOM::measure(
 
 void NativeDOM::measureInWindow(
     jsi::Runtime& rt,
-    std::shared_ptr<const ShadowNode> shadowNode,
+    ShadowNode::Shared shadowNode,
     jsi::Function callback) {
   auto currentRevision =
       getCurrentShadowTreeRevision(rt, shadowNode->getSurfaceId());
@@ -431,8 +422,8 @@ void NativeDOM::measureInWindow(
 
 void NativeDOM::measureLayout(
     jsi::Runtime& rt,
-    std::shared_ptr<const ShadowNode> shadowNode,
-    std::shared_ptr<const ShadowNode> relativeToShadowNode,
+    ShadowNode::Shared shadowNode,
+    ShadowNode::Shared relativeToShadowNode,
     jsi::Function onFail,
     jsi::Function onSuccess) {
   auto currentRevision =
@@ -466,7 +457,7 @@ void NativeDOM::measureLayout(
 
 void NativeDOM::setNativeProps(
     jsi::Runtime& rt,
-    std::shared_ptr<const ShadowNode> shadowNode,
+    ShadowNode::Shared shadowNode,
     jsi::Value updatePayload) {
   getUIManagerFromRuntime(rt).setNativeProps_DEPRECATED(
       shadowNode, RawProps(rt, updatePayload));

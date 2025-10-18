@@ -40,7 +40,6 @@ const RNTesterBlock = ({description, title, children}: Props): React.Node => {
           <Text
             style={[
               styles.descriptionText,
-              // $FlowFixMe[constant-condition]
               {color: theme.LabelColor, marginTop: description ? 10 : 0},
             ]}>
             {description}
