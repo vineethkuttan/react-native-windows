@@ -11,20 +11,22 @@ name: Git Operations
         options:
           - 'Cherry-pick Commit to Branch'
           - 'Create Branch from Upstream'
+      # Cherry-pick operation inputs (only fill if Cherry-pick is selected above)
       commit_id:
-        description: 'Commit SHA or ID to cherry-pick (required for Cherry-pick operation)'
+        description: '🍒 [Cherry-pick] Commit SHA or ID to cherry-pick'
         required: false
         type: string
       target_branch:
-        description: 'Target branch name to cherry-pick into (required for Cherry-pick operation)'
+        description: '🍒 [Cherry-pick] Target branch name to cherry-pick into'
         required: false
         type: string
+      # Create branch operation inputs (only fill if Create Branch is selected above)  
       upstream_branch:
-        description: 'Upstream branch name to create from, e.g., 0.81-stable, main (required for Create Branch operation)'
+        description: '🌿 [Create Branch] Upstream branch name (e.g., 0.81-stable, main)'
         required: false
         type: string
       new_branch_name:
-        description: 'Name for new branch in your fork - leave empty to use same name as upstream (Create Branch operation)'
+        description: '🌿 [Create Branch] New branch name (leave empty to use upstream name)'
         required: false
         type: string
         default: ''
