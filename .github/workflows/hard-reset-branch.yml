@@ -1,0 +1,106 @@
+---
+name: Hard Reset Branch to Commit
+
+'on':
+  workflow_dispatch:
+    inputs:
+      target_branch:
+        description: 'Branch name to reset'
+        required: true
+        type: string
+      commit_sha:
+        description: 'Commit SHA to reset to'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  hard-reset:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install GitHub CLI
+        run: |
+          sudo apt update
+          sudo apt install -y gh
+
+      - name: Authenticate GitHub CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: Clone repository
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh auth setup-git
+          gh repo clone "${{ github.repository }}" repo
+          cd repo
+          git fetch origin
+
+      - name: Configure Git
+        working-directory: ./repo
+        run: |
+          git config user.name "React-Native-Windows Bot"
+          git config user.email "53619745+rnbot@users.noreply.github.com"
+
+      - name: Validate inputs
+        working-directory: ./repo
+        run: |
+          TARGET_BRANCH="${{ github.event.inputs.target_branch }}"
+          COMMIT_SHA="${{ github.event.inputs.commit_sha }}"
+
+          echo "🔍 Validating inputs..."
+
+          # Check if target branch exists
+          if ! git ls-remote --exit-code --heads origin "$TARGET_BRANCH" > /dev/null 2>&1; then
+            echo "❌ Error: Branch '$TARGET_BRANCH' does not exist"
+            exit 1
+          fi
+          echo "✅ Branch '$TARGET_BRANCH' exists"
+
+          # Check if commit SHA exists
+          if ! git cat-file -e "$COMMIT_SHA^{commit}" 2>/dev/null; then
+            echo "❌ Error: Commit '$COMMIT_SHA' does not exist"
+            exit 1
+          fi
+          echo "✅ Commit '$COMMIT_SHA' exists"
+
+      - name: Checkout target branch
+        working-directory: ./repo
+        run: |
+          git checkout "${{ github.event.inputs.target_branch }}"
+          git pull origin "${{ github.event.inputs.target_branch }}"
+
+      - name: Hard reset branch to commit
+        working-directory: ./repo
+        run: |
+          TARGET_BRANCH="${{ github.event.inputs.target_branch }}"
+          COMMIT_SHA="${{ github.event.inputs.commit_sha }}"
+
+          echo "🔄 Hard resetting branch '$TARGET_BRANCH' to commit '$COMMIT_SHA'"
+          echo ""
+          echo "📋 Current HEAD before reset:"
+          git log -1 --oneline
+          echo ""
+
+          git reset --hard "$COMMIT_SHA"
+
+          echo ""
+          echo "📋 HEAD after reset:"
+          git log -1 --oneline
+
+      - name: Force push changes
+        working-directory: ./repo
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          TARGET_BRANCH="${{ github.event.inputs.target_branch }}"
+          COMMIT_SHA="${{ github.event.inputs.commit_sha }}"
+
+          echo "📤 Force pushing reset to '$TARGET_BRANCH'"
+          REPO_URL="https://x-access-token:${GH_TOKEN}@github.com"
+          REPO_URL="${REPO_URL}/${{ github.repository }}.git"
+          git push --force "$REPO_URL" "$TARGET_BRANCH"
+          echo ""
+          echo "✅ Successfully hard reset '$TARGET_BRANCH' to commit '$COMMIT_SHA'"
