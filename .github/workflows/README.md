@@ -4,11 +4,11 @@ This directory contains GitHub Actions workflows for the React Native Windows re
 
 ## Available Workflows
 
-### Branch Operations
+### Git Operations
 
 **File:** `branch-operations.yml`
 
-A combined workflow that provides two branch-related operations through a dropdown selector:
+A combined workflow that provides two git-related operations through a dropdown selector:
 
 1. **Cherry-pick Commit to Branch** - Cherry-picks a specific commit into a target branch
 2. **Create Branch from Upstream** - Creates a new branch in your fork based on a branch from the upstream microsoft/react-native-windows repository
@@ -16,7 +16,7 @@ A combined workflow that provides two branch-related operations through a dropdo
 **Usage:**
 
 1. Go to the Actions tab in the GitHub repository
-2. Select "Branch Operations" workflow
+2. Select "Git Operations" workflow
 3. Click "Run workflow"
 4. Select the desired operation from the dropdown:
    - **Cherry-pick Commit to Branch** or **Create Branch from Upstream**
