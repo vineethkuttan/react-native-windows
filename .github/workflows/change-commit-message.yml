@@ -1,0 +1,121 @@
+---
+name: Change Commit Message
+
+'on':
+  workflow_dispatch:
+    inputs:
+      commit_sha:
+        description: 'Commit SHA to change the message for'
+        required: true
+        type: string
+      new_message:
+        description: 'New commit message'
+        required: true
+        type: string
+      branch_name:
+        description: 'Branch name where the commit exists'
+        required: true
+        type: string
+
+permissions:
+  contents: write
+
+jobs:
+  change-commit-message:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Install GitHub CLI
+        run: |
+          sudo apt update
+          sudo apt install -y gh
+
+      - name: Authenticate GitHub CLI
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | gh auth login --with-token
+
+      - name: Clone repository
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          gh auth setup-git
+          gh repo clone "${{ github.repository }}" repo
+          cd repo
+          git fetch origin
+
+      - name: Configure Git
+        working-directory: ./repo
+        run: |
+          git config user.name "React-Native-Windows Bot"
+          git config user.email "53619745+rnbot@users.noreply.github.com"
+
+      - name: Checkout branch
+        working-directory: ./repo
+        run: |
+          git checkout "${{ github.event.inputs.branch_name }}"
+          git pull origin "${{ github.event.inputs.branch_name }}"
+
+      - name: Change commit message
+        working-directory: ./repo
+        run: |
+          COMMIT_SHA="${{ github.event.inputs.commit_sha }}"
+          NEW_MESSAGE="${{ github.event.inputs.new_message }}"
+          BRANCH_NAME="${{ github.event.inputs.branch_name }}"
+
+          echo "📝 Changing commit message for $COMMIT_SHA"
+          echo "New message: $NEW_MESSAGE"
+
+          # Verify the commit exists
+          if ! git cat-file -e "$COMMIT_SHA^{commit}" 2>/dev/null; then
+            echo "❌ Commit $COMMIT_SHA not found"
+            exit 1
+          fi
+
+          # Get the current HEAD
+          CURRENT_HEAD=$(git rev-parse HEAD)
+
+          # Check if the commit is the most recent commit
+          if [ "$COMMIT_SHA" = "$CURRENT_HEAD" ] || git merge-base --is-ancestor "$COMMIT_SHA" HEAD && [ "$(git rev-list "$COMMIT_SHA"..HEAD | wc -l)" = "0" ]; then
+            echo "✅ Commit is the most recent commit, using amend"
+            git commit --amend -m "$NEW_MESSAGE"
+          else
+            # For older commits, use filter-branch
+            echo "⚠️ Commit is not the most recent, using filter-branch"
+            
+            # Get the parent of the commit to change
+            PARENT_COMMIT=$(git rev-parse "$COMMIT_SHA^")
+            
+            # Use filter-branch to rewrite commit message
+            echo "Using filter-branch to change commit message"
+            
+            # Create a message filter script
+            echo '#!/bin/bash' > /tmp/msg-filter.sh
+            echo 'if [ "$GIT_COMMIT" = "'"$COMMIT_SHA"'" ]; then' >> /tmp/msg-filter.sh
+            echo '  echo "'"$NEW_MESSAGE"'"' >> /tmp/msg-filter.sh
+            echo 'else' >> /tmp/msg-filter.sh
+            echo '  cat' >> /tmp/msg-filter.sh
+            echo 'fi' >> /tmp/msg-filter.sh
+            chmod +x /tmp/msg-filter.sh
+            
+            # Apply the filter
+            git filter-branch -f --msg-filter /tmp/msg-filter.sh -- "$PARENT_COMMIT..HEAD"
+          fi
+
+          echo "✅ Commit message changed successfully"
+
+      - name: Push changes
+        working-directory: ./repo
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          BRANCH_NAME="${{ github.event.inputs.branch_name }}"
+          COMMIT_SHA="${{ github.event.inputs.commit_sha }}"
+
+          echo "📤 Force pushing changes to $BRANCH_NAME"
+          echo "⚠️ WARNING: This will rewrite Git history!"
+          
+          REPO_URL="https://x-access-token:${GH_TOKEN}@github.com"
+          REPO_URL="${REPO_URL}/${{ github.repository }}.git"
+          git push --force-with-lease "$REPO_URL" "$BRANCH_NAME"
+          
+          echo "✅ Successfully changed commit message for $COMMIT_SHA on $BRANCH_NAME"
+          echo "⚠️ Note: History has been rewritten. Other collaborators will need to rebase."
