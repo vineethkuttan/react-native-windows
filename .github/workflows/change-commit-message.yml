@@ -74,13 +74,19 @@ jobs:
           CURRENT_HEAD=$(git rev-parse HEAD)
 
           # Check if the commit is the most recent commit
-          COMMITS_AFTER=$(git rev-list "$COMMIT_SHA"..HEAD | wc -l)
-          if [ "$COMMIT_SHA" = "$CURRENT_HEAD" ] || [ "$COMMITS_AFTER" = "0" ]; then
+          if [ "$COMMIT_SHA" = "$CURRENT_HEAD" ]; then
             echo "✅ Commit is the most recent commit, using amend"
             git commit --amend -m "$NEW_MESSAGE"
           else
             # For older commits, use filter-branch
             echo "⚠️ Commit is not the most recent, using filter-branch"
+            
+            # Check if this is the root commit
+            if ! git rev-parse "$COMMIT_SHA^" >/dev/null 2>&1; then
+              echo "❌ Cannot change message for root commit using this method"
+              echo "Root commits require special handling"
+              exit 1
+            fi
             
             # Get the parent of the commit to change
             PARENT_COMMIT=$(git rev-parse "$COMMIT_SHA^")

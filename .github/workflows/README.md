@@ -60,3 +60,5 @@ Changes the commit message for a specific commit on a branch. This workflow rewr
 - The workflow uses `--force-with-lease` to prevent accidental overwrites
 - For the most recent commit, it uses `git commit --amend`
 - For older commits, it uses `git filter-branch` to rewrite history
+- Cannot change the root commit (first commit in repository) message
+- Note: `git filter-branch` is deprecated but used here for broad compatibility. For production use, consider `git filter-repo` or interactive rebase
