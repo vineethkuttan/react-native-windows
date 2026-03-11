@@ -502,6 +502,17 @@ const AccessibilityInfo = {
    * - `announcement`: The string announced by the screen reader.
    * - `options`: An object that configures the reading options.
    *   - `queue`: The announcement will be queued behind existing announcements. iOS only.
+<<<<<<< Upstream
+   *   - `priority`: The priority of the announcement. Possible values: 'low' | 'default' | 'high'.
+   *     High priority announcements will interrupt any ongoing speech and cannot be interrupted.
+   *     Default priority announcements will interrupt any ongoing speech but can be interrupted.
+   *     Low priority announcements will not interrupt ongoing speech and can be interrupted.
+   *     (iOS only).
+   */
+  announceForAccessibilityWithOptions(
+    announcement: string,
+    options: {queue?: boolean, priority?: 'low' | 'default' | 'high'},
+=======
    *   - `nativeID`: The nativeID of the element to send the announcement from. win32 only.
    */
   announceForAccessibilityWithOptions(
@@ -510,6 +521,7 @@ const AccessibilityInfo = {
       queue?: boolean,
       nativeID?: string, // win32
     },
+>>>>>>> Override
   ): void {
     if (Platform.OS === 'android') {
       NativeAccessibilityInfo?.announceForAccessibility(announcement);

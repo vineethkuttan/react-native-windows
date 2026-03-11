@@ -15,6 +15,12 @@ import type {ViewStyleProp} from '../../StyleSheet/StyleSheet';
 import type {
   BlurEvent,
   FocusEvent,
+<<<<<<< Upstream
+  GestureResponderEvent,
+  KeyDownEvent,
+  KeyUpEvent,
+=======
+>>>>>>> Override
   LayoutChangeEvent,
   LayoutRectangle,
   MouseEvent,
@@ -114,6 +120,13 @@ type FocusEventProps = $ReadOnly<{
   onBlurCapture?: ?(event: BlurEvent) => void,
   onFocus?: ?(event: FocusEvent) => void,
   onFocusCapture?: ?(event: FocusEvent) => void,
+}>;
+
+type KeyEventProps = $ReadOnly<{
+  onKeyDown?: ?(event: KeyDownEvent) => void,
+  onKeyDownCapture?: ?(event: KeyDownEvent) => void,
+  onKeyUp?: ?(event: KeyUpEvent) => void,
+  onKeyUpCapture?: ?(event: KeyUpEvent) => void,
 }>;
 
 type TouchEventProps = $ReadOnly<{
@@ -577,6 +590,7 @@ export type ViewProps = $ReadOnly<{
   ...MouseEventProps,
   ...PointerEventProps,
   ...FocusEventProps,
+  ...KeyEventProps,
   ...TouchEventProps,
   ...ViewPropsAndroid,
   ...ViewPropsIOS,

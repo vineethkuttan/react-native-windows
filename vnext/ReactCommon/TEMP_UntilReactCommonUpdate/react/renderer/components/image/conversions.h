@@ -163,6 +163,13 @@ inline std::string toString(const ImageResizeMode &value)
       return "repeat";
     case ImageResizeMode::None:
       return "none";
+<<<<<<< Upstream
+    default:
+      LOG(ERROR) << "Unsupported ImageResizeMode value: " << (int)value;
+      react_native_expect(false);
+      // "cover" is default in non-Fabric web and iOS
+      return "cover";
+=======
 //#[Windows
 #if defined(_MSC_VER)
     default:
@@ -172,6 +179,7 @@ inline std::string toString(const ImageResizeMode &value)
         __builtin_unreachable();
 #endif
 // 15379 #Windows]
+>>>>>>> Override
   }
 }
 
