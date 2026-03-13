@@ -361,8 +361,7 @@ export type MouseEvent = NativeSyntheticEvent<
     altKey: boolean,
   }>,
 >;
-<<<<<<< Upstream
-
+// Windows]
 export type KeyEvent = $ReadOnly<{
   /**
    * The actual key that was pressed. For example, F would be "f" or "F" depending on the shift key.
@@ -393,8 +392,6 @@ export type KeyEvent = $ReadOnly<{
 export type KeyUpEvent = NativeSyntheticEvent<KeyEvent>;
 
 export type KeyDownEvent = NativeSyntheticEvent<KeyEvent>;
-=======
-// Windows]
 
 // [Windows
 export type KeyEvent = NativeSyntheticEvent<
@@ -409,4 +406,3 @@ export type KeyEvent = NativeSyntheticEvent<
   |}>,
 >;
 // Windows]
->>>>>>> Override

@@ -15,17 +15,13 @@ import type {ViewStyleProp} from '../../StyleSheet/StyleSheet';
 import type {
   BlurEvent,
   FocusEvent,
-<<<<<<< Upstream
   GestureResponderEvent,
   KeyDownEvent,
   KeyUpEvent,
-=======
->>>>>>> Override
   LayoutChangeEvent,
   LayoutRectangle,
   MouseEvent,
   PointerEvent,
-  GestureResponderEvent,
   KeyEvent, // [Windows]
 } from '../../Types/CoreEventTypes';
 import type {

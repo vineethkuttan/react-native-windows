@@ -197,7 +197,6 @@ function RtlAndInlineViewsExample(): React.Node {
   );
 }
 
-<<<<<<< Upstream
 component TextWithLinkRoleExample() {
   const handlePress = () => console.log('Link Press');
 
@@ -241,10 +240,7 @@ const styles = StyleSheet.create({
   },
 });
 
-export default [
-=======
 const examples = [
->>>>>>> Override
   {
     title: 'Empty Text',
     name: 'emptyText',
@@ -273,15 +269,12 @@ const examples = [
     scrollable: true,
     render: NumberOfLinesTextLayoutExample,
   },
-<<<<<<< Upstream
   {
     title: 'Text with link role',
     name: 'textWithLinkRole',
     description: 'Shows the a11y behavior of Text with role="link"',
     render: TextWithLinkRoleExample,
   },
-] as $ReadOnlyArray<RNTesterModuleExample>;
-=======
   // Windows: Only include TextInlineViewsExample in Fabric mode (bridgeless)
   // Paper mode doesn't support Views nested in Text
   ...(global.RN$Bridgeless === true
@@ -300,4 +293,3 @@ const examples = [
 ];
 
 export default examples;
->>>>>>> Override

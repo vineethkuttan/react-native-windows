@@ -153,13 +153,6 @@
       "issue": 14204
     },
     {
-      "type": "patch",
-      "file": "ReactCommon/TEMP_UntilReactCommonUpdate/react/renderer/components/image/conversions.h",
-      "baseFile": "packages/react-native/ReactCommon/react/renderer/components/image/conversions.h",
-      "baseHash": "828baeee90c0961d8b4a2fe85a5611de8a346fad",
-      "issue": 15379
-    },
-    {
       "type": "derived",
       "file": "ReactCommon/TEMP_UntilReactCommonUpdate/react/renderer/components/text/BaseParagraphProps.cpp",
       "baseFile": "packages/react-native/ReactCommon/react/renderer/components/text/BaseParagraphProps.cpp",
@@ -198,13 +191,6 @@
       "file": "ReactCommon/TEMP_UntilReactCommonUpdate/react/renderer/components/view/accessibilityPropsConversions.h",
       "baseFile": "packages/react-native/ReactCommon/react/renderer/components/view/accessibilityPropsConversions.h",
       "baseHash": "72cc422293c0e70f454225476cdabd3458bbce5e"
-    },
-    {
-      "type": "patch",
-      "file": "ReactCommon/TEMP_UntilReactCommonUpdate/react/renderer/imagemanager/primitives.h",
-      "baseFile": "packages/react-native/ReactCommon/react/renderer/imagemanager/primitives.h",
-      "baseHash": "46a66e729e744fefab8b0a2a5a8c1d249136b03a",
-      "issue": 15263
     },
     {
       "type": "copy",

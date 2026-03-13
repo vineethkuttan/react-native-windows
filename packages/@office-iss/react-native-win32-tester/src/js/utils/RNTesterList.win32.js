@@ -79,7 +79,6 @@ const Components: Array<RNTesterModuleInfo> = [
     module: require('../examples/KeyboardAvoidingView/KeyboardAvoidingViewExample'),
   },
   {
-<<<<<<< Upstream
     key: 'KeyEvents',
     module: require('../examples/KeyboardEventsExample/KeyboardEventsExample')
       .default,
@@ -90,8 +89,6 @@ const Components: Array<RNTesterModuleInfo> = [
     module: require('../examples/Modal/ModalExample'),
   },
   {
-=======
->>>>>>> Override
     key: 'NewAppScreenExample',
     module: require('../examples/NewAppScreen/NewAppScreenExample'),
   },
