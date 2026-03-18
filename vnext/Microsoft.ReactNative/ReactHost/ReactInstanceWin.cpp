@@ -59,6 +59,7 @@
 #include <react/renderer/componentregistry/native/NativeComponentRegistryBinding.h>
 #include <react/runtime/PlatformTimerRegistry.h>
 #include <react/runtime/TimerManager.h>
+#include <react/runtime/JSRuntimeBindings.h>
 #include <react/threading/MessageQueueThreadImpl.h>
 #include "Inspector/ReactInspectorThread.h"
 

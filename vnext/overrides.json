@@ -193,6 +193,13 @@
       "baseHash": "72cc422293c0e70f454225476cdabd3458bbce5e"
     },
     {
+      "type": "patch",
+      "file": "ReactCommon/TEMP_UntilReactCommonUpdate/react/renderer/core/propsConversions.h",
+      "baseFile": "packages/react-native/ReactCommon/react/renderer/core/propsConversions.h",
+      "baseHash": "4b5427c2d17fc9ae2842d56a78db949467411178",
+      "issue": 15782
+    },
+    {
       "type": "copy",
       "directory": "ReactCopies/IntegrationTests",
       "baseDirectory": "packages/rn-tester/IntegrationTests",
