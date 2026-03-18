@@ -254,18 +254,6 @@
     },
     {
       "type": "patch",
-      "file": "ReactCommon/TEMP_UntilReactCommonUpdate/react/renderer/core/EventDispatcher.cpp",
-      "baseFile": "packages/react-native/ReactCommon/react/renderer/core/EventDispatcher.cpp",
-      "baseHash": "8585eaca4fa573b0264937db0c6c0b3facc933c8"
-    },
-    {
-      "type": "patch",
-      "file": "ReactCommon/TEMP_UntilReactCommonUpdate/react/renderer/core/EventQueueProcessor.cpp",
-      "baseFile": "packages/react-native/ReactCommon/react/renderer/core/EventQueueProcessor.cpp",
-      "baseHash": "01fecdc627c28c20913fa240e153dcc5c376a3e9"
-    },
-    {
-      "type": "patch",
       "file": "ReactCommon/TEMP_UntilReactCommonUpdate/react/renderer/core/propsConversions.h",
       "baseFile": "packages/react-native/ReactCommon/react/renderer/core/propsConversions.h",
       "baseHash": "4b5427c2d17fc9ae2842d56a78db949467411178",
