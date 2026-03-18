@@ -387,22 +387,9 @@ export type KeyEvent = $ReadOnly<{
    * @see https://developer.mozilla.org/en-US/docs/Web/API/CompositionEvent/isComposing
    */
   isComposing?: boolean,
+  eventPhase: number, //Windows
 }>;
 
 export type KeyUpEvent = NativeSyntheticEvent<KeyEvent>;
 
 export type KeyDownEvent = NativeSyntheticEvent<KeyEvent>;
-
-// [Windows
-export type KeyEvent = NativeSyntheticEvent<
-  $ReadOnly<{|
-    altKey: boolean,
-    ctrlKey: boolean,
-    metaKey: boolean,
-    shiftKey: boolean,
-    key: string,
-    code: string,
-    eventPhase: number,
-  |}>,
->;
-// Windows]

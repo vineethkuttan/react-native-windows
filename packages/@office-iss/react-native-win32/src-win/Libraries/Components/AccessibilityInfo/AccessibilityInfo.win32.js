@@ -521,9 +521,10 @@ const AccessibilityInfo = {
       NativeAccessibilityInfo?.announceForAccessibility(announcement);
     } else if (Platform.OS === 'win32') {
       if (NativeAccessibilityInfoWin32?.announceForAccessibilityWithOptions) {
+        const {priority: _, ...win32Options} = options;
         NativeAccessibilityInfoWin32?.announceForAccessibilityWithOptions(
           announcement,
-          options,
+          win32Options,
         );
       } else {
         NativeAccessibilityInfoWin32?.announceForAccessibility(announcement);

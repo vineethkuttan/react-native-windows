@@ -357,19 +357,6 @@ export type MouseEvent = NativeSyntheticEvent<
 >;
 // Windows]
 
-// [Windows
-export type KeyEvent = NativeSyntheticEvent<
-  $ReadOnly<{
-    altKey: boolean,
-    ctrlKey: boolean,
-    metaKey: boolean,
-    shiftKey: boolean,
-    key: string,
-    code: string,
-    eventPhase: number,
-  }>,
->;
-// Windows]
 export type KeyEvent = $ReadOnly<{
   /**
    * The actual key that was pressed. For example, F would be "f" or "F" depending on the shift key.
@@ -395,6 +382,7 @@ export type KeyEvent = $ReadOnly<{
    * @see https://developer.mozilla.org/en-US/docs/Web/API/CompositionEvent/isComposing
    */
   isComposing?: boolean,
+  eventPhase: number, // Windows
 }>;
 
 export type KeyUpEvent = NativeSyntheticEvent<KeyEvent>;

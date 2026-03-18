@@ -197,7 +197,7 @@ function RtlAndInlineViewsExample(): React.Node {
   );
 }
 
-component TextWithLinkRoleExample() {
+function TextWithLinkRoleExample(): React.Node {
   const handlePress = () => console.log('Link Press');
 
   return (
