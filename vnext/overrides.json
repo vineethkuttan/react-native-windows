@@ -74,10 +74,10 @@
       "baseHash": "055780673941b2ef9997b50c5b88f46d07ec4d28"
     },
     {
-      "type": "patch",
+      "type": "derived",
       "file": "ReactCommon/TEMP_UntilReactCommonUpdate/cxxreact/JSIndexedRAMBundle.cpp",
       "baseFile": "packages/react-native/ReactCommon/cxxreact/JSIndexedRAMBundle.cpp",
-      "baseHash": "001977331502eb71ad71a4b5721542ef434ac2cd"
+      "baseHash": "137b3479e4086c2982b56e5c394951000954dd0a"
     },
     {
       "type": "patch",
@@ -108,7 +108,7 @@
       "type": "patch",
       "file": "ReactCommon/TEMP_UntilReactCommonUpdate/cxxreact/ReactMarker.cpp",
       "baseFile": "packages/react-native/ReactCommon/cxxreact/ReactMarker.cpp",
-      "baseHash": "0561086bf2bb4cb260dff05f82bbaac2b647a149"
+      "baseHash": "3320750a1ebb55268cb4504e62b009ae62b5ea9a"
     },
     {
       "type": "patch",
@@ -125,10 +125,10 @@
       "issue": 12210
     },
     {
-      "type": "patch",
+      "type": "derived",
       "file": "ReactCommon/TEMP_UntilReactCommonUpdate/jsiexecutor/jsireact/JSIExecutor.cpp",
       "baseFile": "packages/react-native/ReactCommon/jsiexecutor/jsireact/JSIExecutor.cpp",
-      "baseHash": "37ca5cc8c0d30c20ab67a80e0a523966234ac702"
+      "baseHash": "2579efb816d78bf9516bf7b0d39fea56622621a5"
     },
     {
       "type": "patch",
@@ -253,16 +253,16 @@
       "baseHash": "72cc422293c0e70f454225476cdabd3458bbce5e"
     },
     {
-      "type": "patch",
+      "type": "derived",
       "file": "ReactCommon/TEMP_UntilReactCommonUpdate/react/renderer/core/EventDispatcher.cpp",
       "baseFile": "packages/react-native/ReactCommon/react/renderer/core/EventDispatcher.cpp",
-      "baseHash": "8585eaca4fa573b0264937db0c6c0b3facc933c8"
+      "baseHash": "42988a48e4c1e7f1628a72676d0bc6cf2c25d8d3"
     },
     {
-      "type": "patch",
+      "type": "derived",
       "file": "ReactCommon/TEMP_UntilReactCommonUpdate/react/renderer/core/EventQueueProcessor.cpp",
       "baseFile": "packages/react-native/ReactCommon/react/renderer/core/EventQueueProcessor.cpp",
-      "baseHash": "01fecdc627c28c20913fa240e153dcc5c376a3e9"
+      "baseHash": "f5f29ba820682da68ba6fba7935e2d3a3e2881ed"
     },
     {
       "type": "patch",
@@ -272,16 +272,16 @@
       "issue": 15782
     },
     {
-      "type": "patch",
+      "type": "derived",
       "file": "ReactCommon/TEMP_UntilReactCommonUpdate/react/renderer/uimanager/UIManager.cpp",
       "baseFile": "packages/react-native/ReactCommon/react/renderer/uimanager/UIManager.cpp",
-      "baseHash": "f562089febf0382dd27d8caed23429375af79cbb"
+      "baseHash": "a3631f83c2779dbcd7494c8bebc95652cc121b81"
     },
     {
-      "type": "patch",
+      "type": "derived",
       "file": "ReactCommon/TEMP_UntilReactCommonUpdate/react/runtime/ReactInstance.cpp",
       "baseFile": "packages/react-native/ReactCommon/react/runtime/ReactInstance.cpp",
-      "baseHash": "2ca899d68ebd5314c991d7f394f8ea4f3c6baf39"
+      "baseHash": "8ba7b2445e78a8addd7b6ebec7a3649783b48b5f"
     },
     {
       "type": "copy",
