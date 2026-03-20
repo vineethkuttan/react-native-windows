@@ -76,7 +76,7 @@ void JSIndexedRAMBundle::init() {
   readBundle(reinterpret_cast<char*>(m_table.data.get()), m_table.byteLength());
 
   // read the startup code
-  m_startupCode = std::make_unique<JSBigBufferString>(startupCodeSize - 1);
+  m_startupCode = std::make_unique<JSBigBufferString>(static_cast<size_t>(startupCodeSize - 1)); //Windows #15782
 
   readBundle(m_startupCode->mutableData(), startupCodeSize - 1);
 }
