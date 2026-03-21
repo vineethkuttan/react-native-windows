@@ -66,11 +66,11 @@ const Components: Array<RNTesterModuleInfo> = [
     category: 'UI',
     module: require('../examples-win/Glyph/GlyphExample'),
   },
-  {
+  /*{
     key: 'KeyEvents',
     module: require('../examples/KeyboardEventsExample/KeyboardEventsExample')
       .default,
-  },
+  },*/
   {
     key: 'ModalExample',
     category: 'UI',
